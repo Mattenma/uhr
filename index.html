@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timer</title>
+  <title>Wecker</title>
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -256,7 +256,7 @@
   <div class="menu-content">
     <a href="/plus/index.html">Home</a>
     <a href="/rendite/index.html">Rendite</a>
-    <a href="/timer/index.html">Timer</a>
+    <a href="/timer/index.html">Wecker</a>
     <a href="/plus/about.html">About</a>
   </div>
 </div>
@@ -365,8 +365,8 @@
       if (remainingTime <= 0) {
         clearInterval(timer);
         remainingTime = 0;
-        timerDisplay.textContent = 'Timer abgelaufen';
-        document.title = 'Timer abgelaufen';
+        timerDisplay.textContent = 'Wecker abgelaufen';
+        document.title = 'Wecker abgelaufen';
         if (!alarmSound.played.length) {
           alarmSound.play();
         }
@@ -395,13 +395,22 @@
     const seconds = remainingTime % 60;
 
     let displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    let titleText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    let titleText;
+
+    if (remainingTime > 60) {
+      titleText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    } else {
+      titleText = displayText;
+    }
 
     timerDisplay.textContent = displayText;
-    document.title = `Timer - ${titleText}`;
+    document.title = `Wecker - ${titleText}`;
 
-    const progress = ((totalTime - remainingTime) / totalTime) * 100;
-    updateProgressBar();
+    const progress = Math.round(((totalTime - remainingTime) / totalTime) * 6);
+    const filled = '█'.repeat(progress);
+    const empty = '▁'.repeat(6 - progress);
+    document.title = `Wecker - ${titleText} ${filled}${empty}`;
+
     updateTargetTimeDisplay();
   }
 
@@ -425,7 +434,7 @@
     progressBar.style.width = '0%';
     timeInput.value = '';
     timeInput.focus();
-    document.title = 'Timer';
+    document.title = 'Wecker';
   }
 </script>
 
