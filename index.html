@@ -262,7 +262,7 @@
 </div>
 
 <div class="timer-container">
-  <input type="text" id="timeInput" class="input-field" placeholder="HH:MM" autofocus>
+  <input type="text" id="timeInput" class="input-field" placeholder="HH:MM oder HH.MM" autofocus>
   <div id="timerDisplay" class="timer-display"></div>
   <div id="targetTimeDisplay" class="target-time-display"></div>
   <div class="progress-bar-container" id="progressBarContainer">
@@ -333,7 +333,7 @@
   function startTimer() {
     const inputTime = parseTimeInput(timeInput.value);
     if (!inputTime) {
-      alert('Bitte geben Sie eine gültige Uhrzeit im Format HH:MM ein.');
+      alert('Bitte geben Sie eine gültige Uhrzeit im Format HH:MM oder HH.MM ein.');
       return;
     }
 
@@ -375,7 +375,10 @@
   }
 
   function parseTimeInput(input) {
-    const match = input.match(/^(\d{1,2}):(\d{2})$/);
+    let match = input.match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) {
+      match = input.match(/^(\d{1,2})\.(\d{2})$/);
+    }
     if (!match) return null;
 
     const hours = parseInt(match[1], 10);
@@ -401,12 +404,12 @@
       displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       titleText = displayText;
     } else {
-      displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       titleText = displayText;
     }
 
     timerDisplay.textContent = displayText;
-    document.title = `Wecker - ${titleText}`;
+    document.title = titleText;
 
     const progress = Math.round(((totalTime - remainingTime) / totalTime) * 6);
     const filled = '█'.repeat(progress);
