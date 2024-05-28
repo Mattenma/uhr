@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wecker / Uhr</title>
+  <title>Timer</title>
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -183,6 +183,12 @@
       transition: color 0.3s;
     }
 
+    .target-time-display {
+      font-size: 18px;
+      margin: 10px 0; /* Reduced margin */
+      color: gray;
+    }
+
     .progress-bar-container {
       margin: 10px 0; /* Reduced margin */
       background: #E0E0E0;
@@ -211,6 +217,10 @@
     }
 
     .dark-mode .timer-display {
+      color: #BB86FC;
+    }
+
+    .dark-mode .target-time-display {
       color: #BB86FC;
     }
 
@@ -254,6 +264,7 @@
 <div class="timer-container">
   <input type="text" id="timeInput" class="input-field" placeholder="HH:MM" autofocus>
   <div id="timerDisplay" class="timer-display"></div>
+  <div id="targetTimeDisplay" class="target-time-display"></div>
   <div class="progress-bar-container" id="progressBarContainer">
     <div id="progressBar" class="progress-bar"></div>
   </div>
@@ -280,6 +291,7 @@
 
   const timeInput = document.getElementById('timeInput');
   const timerDisplay = document.getElementById('timerDisplay');
+  const targetTimeDisplay = document.getElementById('targetTimeDisplay');
   const progressBar = document.getElementById('progressBar');
   const progressBarContainer = document.getElementById('progressBarContainer');
   const resetButton = document.getElementById('resetButton');
@@ -288,7 +300,6 @@
   let timer;
   let totalTime;
   let remainingTime;
-  let unit;
   let targetTime;
   let timerPausedAt;
 
@@ -384,10 +395,19 @@
     const seconds = remainingTime % 60;
 
     let displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    let titleText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
     timerDisplay.textContent = displayText;
+    document.title = `Timer - ${titleText}`;
 
     const progress = ((totalTime - remainingTime) / totalTime) * 100;
-    document.title = `Timer - ${displayText}`;
+    updateProgressBar();
+    updateTargetTimeDisplay();
+  }
+
+  function updateTargetTimeDisplay() {
+    const targetTimeText = `${targetTime.hours.toString().padStart(2, '0')}:${targetTime.minutes.toString().padStart(2, '0')}`;
+    targetTimeDisplay.textContent = `Anvisierte Uhrzeit: ${targetTimeText}`;
   }
 
   function updateProgressBar() {
@@ -401,6 +421,7 @@
     resetButton.style.display = 'none';
     progressBarContainer.style.display = 'none';
     timerDisplay.textContent = '';
+    targetTimeDisplay.textContent = '';
     progressBar.style.width = '0%';
     timeInput.value = '';
     timeInput.focus();
