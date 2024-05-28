@@ -394,12 +394,14 @@
     const minutes = Math.floor((remainingTime % 3600) / 60);
     const seconds = remainingTime % 60;
 
-    let displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    let displayText;
     let titleText;
 
     if (remainingTime > 60) {
-      titleText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      titleText = displayText;
     } else {
+      displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       titleText = displayText;
     }
 
@@ -409,7 +411,7 @@
     const progress = Math.round(((totalTime - remainingTime) / totalTime) * 6);
     const filled = '█'.repeat(progress);
     const empty = '▁'.repeat(6 - progress);
-    document.title = `Wecker - ${titleText} ${filled}${empty}`;
+    document.title = titleText + ' ' + filled + empty;
 
     updateTargetTimeDisplay();
   }
