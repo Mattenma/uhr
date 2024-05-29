@@ -401,10 +401,15 @@
     let titleText;
 
     if (remainingTime > 60) {
-      displayText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      titleText = displayText;
+      if (hours > 0) {
+        displayText = `${hours}:${minutes.toString().padStart(2, '0')}h`;
+        titleText = displayText;
+      } else {
+        displayText = `${minutes}m`;
+        titleText = displayText;
+      }
     } else {
-      displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}m`;
       titleText = displayText;
     }
 
